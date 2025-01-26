@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: ShapeAnimationScreen(),
+      home: const ShapeAnimationScreen(),
     );
   }
 }
@@ -237,10 +237,7 @@ class _ShapeAnimationScreenState extends State<ShapeAnimationScreen>
                     onChanged: (change) => {
                       setState(() {
                         _durationSeconds = change;
-                        _controller.duration =
-                            Duration(seconds: _durationSeconds);
-                        _controller.reset();
-                        !_isAnimating ? _controller.stop() : null;
+                        setControllerTimer();
                       }),
                     },
                     minValue: 1,
@@ -276,6 +273,24 @@ class _ShapeAnimationScreenState extends State<ShapeAnimationScreen>
         ),
       ),
     );
+  }
+
+  void setControllerTimer() {
+    int sec;
+
+    if (_currentShape == ShapeType.triangle) {
+      sec = _durationSeconds * 3;
+    } else
+    if (_currentShape == ShapeType.square) {
+      sec = _durationSeconds * 4;
+    } else {
+      sec = _durationSeconds;
+    }
+
+    _controller.duration =
+        Duration(seconds: sec);
+    _controller.reset();
+    !_isAnimating ? _controller.stop() : null;
   }
 }
 
