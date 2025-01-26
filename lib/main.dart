@@ -142,8 +142,7 @@ class _ShapeAnimationScreenState extends State<ShapeAnimationScreen>
 
             if (_currentShape == ShapeType.line) {
               _controller.reverse();
-            } else
-            if (_currentShape == ShapeType.triangle) {
+            } else {
               _controller.reset();
               if (_isAnimating) {
                 _controller.forward();
@@ -200,8 +199,10 @@ class _ShapeAnimationScreenState extends State<ShapeAnimationScreen>
                         size: const Size(2, 100),
                         painter:
                         _currentShape == ShapeType.line ?
-                        LineAnimatorPainter(progress: _controller.value, isReverse: _isLineReverse):
-                        TriangleAnimatorPainter(progress: _controller.value, isPrimaryColor: _isPrimaryColor)
+                          LineAnimatorPainter(progress: _controller.value, isReverse: _isLineReverse):
+                        _currentShape == ShapeType.triangle ?
+                          TriangleAnimatorPainter(progress: _controller.value, isPrimaryColor: _isPrimaryColor) :
+                          SquareAnimatorPainter(progress: _controller.value, isPrimaryColor: _isPrimaryColor)
                         ,
                         // Width of 2 for the line thickness
                         // painter: _currentShape == ShapeType.triangle
@@ -292,6 +293,99 @@ class _ShapeAnimationScreenState extends State<ShapeAnimationScreen>
     _controller.reset();
     !_isAnimating ? _controller.stop() : null;
   }
+}
+
+class SquareAnimatorPainter extends CustomPainter {
+  final double progress;
+  final bool isPrimaryColor;
+
+  SquareAnimatorPainter({
+    required this.progress,
+    required this.isPrimaryColor
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+
+    final blackPaint = Paint()
+      ..color = Colors.black
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 20;
+
+    final bluePaint = Paint()
+      ..color = Colors.blue
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 20;
+
+    Rect square = Rect.fromLTWH(
+      0, 0, size.width, size.height
+    );
+
+    canvas.drawRect(square, isPrimaryColor ? blackPaint : bluePaint);
+
+
+    final bottomLeft = Offset(0, size.height);
+    const topLeft = Offset(0, 0);
+    final bottomRight = Offset(size.width, size.height);
+    final topRight = Offset(size.width, 0);
+
+    Path progressPath = Path();
+    final currentPaint = isPrimaryColor ? bluePaint : blackPaint;
+
+
+    const totalSides = 4.0;
+    final currentSide = (progress * totalSides).floor();
+    final sideProgress = (progress * totalSides) % 1;
+
+    if (currentSide == 0) {
+      final partialX = bottomLeft.dx;
+      final partialY = size.height - (size.height * sideProgress);
+
+      progressPath
+        ..moveTo(bottomLeft.dx, bottomLeft.dy)
+        ..lineTo(partialX, partialY);
+    } else
+    if (currentSide == 1 ) {
+      final partialX = bottomLeft.dx + (size.width * sideProgress);
+      final partialY  = topLeft.dy;
+
+      progressPath
+        ..moveTo(bottomLeft.dx, bottomLeft.dy)
+        ..lineTo(topLeft.dx, topLeft.dy)
+        ..lineTo(partialX, partialY);
+    } else
+    if (currentSide == 2 ) {
+      final partialX = topRight.dx;
+      final partialY = topRight.dy + (size.height * sideProgress);
+
+      progressPath
+        ..moveTo(bottomLeft.dx, bottomLeft.dy)
+        ..lineTo(topLeft.dx, topLeft.dy)
+        ..lineTo(topRight.dx, topRight.dy)
+        ..lineTo(partialX, partialY);
+    } else
+    if (currentSide == 3 ) {
+      final partialX = bottomRight.dx - (size.width * sideProgress);
+      final partialY = bottomRight.dy;
+
+      progressPath
+        ..moveTo(bottomLeft.dx, bottomLeft.dy)
+        ..lineTo(topLeft.dx, topLeft.dy)
+        ..lineTo(topRight.dx, topRight.dy)
+        ..lineTo(bottomRight.dx, bottomRight.dy)
+        ..lineTo(partialX, partialY);
+    }
+
+    canvas.drawPath(progressPath, currentPaint);
+
+  }
+
+  @override
+  bool shouldRepaint(SquareAnimatorPainter oldDelegate) {
+    return oldDelegate.progress != progress ||
+        oldDelegate.isPrimaryColor != isPrimaryColor;
+  }
+
 }
 
 class TriangleAnimatorPainter extends CustomPainter {
