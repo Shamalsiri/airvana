@@ -48,7 +48,7 @@ class _ShapeAnimationScreenState extends State<ShapeAnimationScreen>
   int _selectedButtonIndex = 0;
   int _rotationCount = 0;
   bool _isAnimating = false;
-  bool _isPrimaryColor = false;
+  bool _isPrimaryColor = true ;
   int _durationSeconds = 3;
 
   Widget panelButton(String name, ShapeType shape, bool isSelected) {
@@ -119,6 +119,7 @@ class _ShapeAnimationScreenState extends State<ShapeAnimationScreen>
         _controller.stop();
         _isLineReverse = false;
         _isAnimating = false;
+        _isPrimaryColor = true;
         _rotationCount = 0;
       }
     });
