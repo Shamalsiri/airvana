@@ -141,7 +141,7 @@ class _ShapeAnimationScreenState extends State<ShapeAnimationScreen>
             });
 
             if (_currentShape == ShapeType.line) {
-              _controller.forward();
+              _controller.reverse();
             } else
             if (_currentShape == ShapeType.triangle) {
               _controller.reset();
