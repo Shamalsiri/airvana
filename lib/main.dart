@@ -339,10 +339,10 @@ class SquareAnimatorPainter extends CustomPainter {
 
     if (currentSide == 0) {
       final partialX = bottomLeft.dx;
-      final partialY = size.height - (size.height * sideProgress);
+      final partialY = size.height + 10 - ((size.height + 10) * sideProgress);
 
       progressPath
-        ..moveTo(bottomLeft.dx, bottomLeft.dy)
+        ..moveTo(bottomLeft.dx, bottomLeft.dy + 10)
         ..lineTo(partialX, partialY);
     } else
     if (currentSide == 1 ) {
@@ -350,7 +350,7 @@ class SquareAnimatorPainter extends CustomPainter {
       final partialY  = topLeft.dy;
 
       progressPath
-        ..moveTo(bottomLeft.dx, bottomLeft.dy)
+        ..moveTo(bottomLeft.dx, bottomLeft.dy + 10)
         ..lineTo(topLeft.dx, topLeft.dy)
         ..lineTo(partialX, partialY);
     } else
@@ -359,7 +359,7 @@ class SquareAnimatorPainter extends CustomPainter {
       final partialY = topRight.dy + (size.height * sideProgress);
 
       progressPath
-        ..moveTo(bottomLeft.dx, bottomLeft.dy)
+        ..moveTo(bottomLeft.dx, bottomLeft.dy + 10)
         ..lineTo(topLeft.dx, topLeft.dy)
         ..lineTo(topRight.dx, topRight.dy)
         ..lineTo(partialX, partialY);
@@ -369,7 +369,7 @@ class SquareAnimatorPainter extends CustomPainter {
       final partialY = bottomRight.dy;
 
       progressPath
-        ..moveTo(bottomLeft.dx, bottomLeft.dy)
+        ..moveTo(bottomLeft.dx, bottomLeft.dy + 10)
         ..lineTo(topLeft.dx, topLeft.dy)
         ..lineTo(topRight.dx, topRight.dy)
         ..lineTo(bottomRight.dx, bottomRight.dy)
